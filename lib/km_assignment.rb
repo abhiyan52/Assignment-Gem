@@ -25,7 +25,7 @@ module KmAssignment
   
       
       def self.process_result(quiz_questions,user_answers)
-       quiz_questions =  quiz_questions.map{|q| OpenStruct.new(JSON.parse(q))}
+        quiz_questions =  quiz_questions.map{|q| OpenStruct.new(JSON.parse(q))}.select{|q| q.valid}
         analysis_per_question = {}
         total_correct_answer = 0
         total_questions = quiz_questions.length
@@ -74,7 +74,12 @@ module KmAssignment
     quiz_form_field.html_input_type = field.type
     quiz_form_field.question = field.label
     quiz_form_field.correct_answer = field.correct_answer
+    quiz_form_field.valid = check_validity(quiz_form_field)
     return quiz_form_field
+  end
+
+  def self.check_validity(field)
+    (!field.question.blank? && !field.correct_answer.blank?) ? true : false
   end
   
   def self.proccess_radio_checkbox_field(field)
@@ -89,6 +94,7 @@ module KmAssignment
       puts (choice["is_answer"].strip() == "true"),choice["label"],choice["is_answer"] 
       quiz_form_field.correct_answer.append(choice["label"]) if choice["is_answer"].strip() == "true"          
     end
+    quiz_form_field.valid = check_validity(quiz_form_field)
     return  quiz_form_field
   end
   end
