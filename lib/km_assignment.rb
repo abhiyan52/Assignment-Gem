@@ -47,7 +47,7 @@ module KmAssignment
             generated_on: Time.now,
             total_questions: total_questions,
             total_correct_answers: total_correct_answer,
-            rating: (total_correct_answer / total_questions) * 100.0 
+            rating: (total_correct_answer / total_questions.to_f) * 100.0 
           }
         }
       end  
