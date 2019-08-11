@@ -179,3 +179,32 @@ input.r_val.form-control {
 input.c_val.form-control{
     display: none;
 }
+
+/* Styles for Form Builder */
+
+.form_builder .bal_builder {
+    border: 0.1em dashed #6f6f6f;
+    padding: 0;
+}
+
+.quiz-builder-container .builder-navigation {
+    border: 1px solid red;
+}
+
+.quiz-builder-container label::before {
+    content: none;
+}
+
+.quiz-builder-container .bal_builder {
+    overflow: auto;
+    padding: 0em;
+    margin: 0;
+}
+.submit-json{
+    border: none;
+}
+.submit-json button{
+    width: 100%;
+    padding: 1em;
+    margin-top: 1em;
+}

@@ -1,0 +1,48 @@
+= javascript_include_tag "km_assignment.js"
+= stylesheet_link_tag "km_assignment.css"
+.container.pt_110  
+  .container.quiz-sbuilder-container
+    .form_builder                                    
+      .clear-fix
+      .row
+        .col-md-9.bal_builder
+          .form_builder_area
+        .col-md-3.builder-navigation
+          %nav.nav-sidebar
+            %ul.nav
+              %li.form_bal_textfield
+                %a{:href => "javascript:;"}
+                  Text Field
+                  %i.fa.fa-plus-circle.pull-right
+              %li.form_bal_textarea
+                %a{:href => "javascript:;"}
+                  Text Area
+                  %i.fa.fa-plus-circle.pull-right
+              %li.form_bal_radio
+                %a{:href => "javascript:;"}
+                  Radio Button
+                  %i.fa.fa-plus-circle.pull-right
+              %li.form_bal_checkbox
+                %a{:href => "javascript:;"}
+                  Checkbox
+                  %i.fa.fa-plus-circle.pull-right
+              %li.form_bal_number
+                %a{:href => "javascript:;"}
+                  Number
+                  %i.fa.fa-plus-circle.pull-right
+              %li.form_bal_date
+                %a{:href => "javascript:;"}
+                  Date
+                  %i.fa.fa-plus-circle.pull-right
+              %li.submit-json
+                = form_for :quiz, url: submit_url, :method=>method do |f|
+                  = f.hidden_field :quiz_question_answers
+                  %button.btn.btn-primary{type: "Submit"}
+                    Submit    
+
+:javascript
+  var result_json;
+  $("form").submit(function(){
+    $("#quiz_quiz_question_answers").val(result_json);
+    return true;
+  });

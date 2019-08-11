@@ -119,7 +119,7 @@ $(document).ready(function() {
 		$(this).closest('.form_builder_field').css('height', 'auto');
 		var field = $(this).attr('data-field');
 		var option = generateField();
-		$('.field_extra_info_' + field).append('<div data-opt="' + option + '" data-field="' + field + '" class="row radio_row_' + field + '"><div class="col-md-4"><div class="form-group"><input type="text" placeholder="Option" class="r_opt form-control" /></div></div><div class="col-md-3"><div class="form-group"><input type="text" placeholder="Value" class="r_val form-control" /></div></div><div class="col-md-3"><div class="form-group"><input type="checkbox" name="correct_answer" placeholder="correct"  class="rb_checkbox"/></div></div><div class="col-md-1"> <i class="margin-top-5 margin-left-5 fa fa-times-circle default_red fa-2x remove_more_radio" data-field="' + field + '"/></div></div>');
+		$('.field_extra_info_' + field).append('<div data-opt="' + option + '" data-field="' + field + '" class="row radio_row_' + field + '"><div class="col-md-6"><div class="form-group"><input type="text" placeholder="Option" class="r_opt form-control" /></div></div><div class="col-md-0"><div class="form-group"><input type="text" placeholder="Value" class="r_val form-control" /></div></div><div class="col-md-3"><div class="form-group"><input type="checkbox" name="correct_answer" placeholder="correct"  class="rb_checkbox"/></div></div><div class="col-md-1"> <i class="margin-top-5 margin-left-5 fa fa-times-circle default_red fa-2x remove_more_radio" data-field="' + field + '"/></div></div>');
 		var options = '';
 		$('.radio_row_' + field).each(function() {
 			var opt = $(this).find('.r_opt').val();
@@ -137,7 +137,7 @@ $(document).ready(function() {
 		$(this).closest('.form_builder_field').css('height', 'auto');
 		var field = $(this).attr('data-field');
 		var option = generateField();
-		$('.field_extra_info_' + field).append('<div data-opt="' + option + '" data-field="' + field + '" class="row checkbox_row_' + field + '"><div class="col-md-4"><div class="form-group"><input type="text" placeholder="Option" class="c_opt form-control" /></div></div><div class="col-md-3"><div class="form-group"><input type="text" placeholder="Value" class="c_val form-control" /></div></div><div class="col-md-3"><div class="form-group"><div class="col-md-12"><input type="checkbox" name="correct_answer" placeholder="correct" class="cb_checkbox" /></div></div></div><div class="col-md-1"> <i class="margin-top-5 margin-left-5 fa fa-times-circle default_red fa-2x remove_more_checkbox" data-field="' + field + '"/></div></div>');
+		$('.field_extra_info_' + field).append('<div data-opt="' + option + '" data-field="' + field + '" class="row checkbox_row_' + field + '"><div class="col-md-6"><div class="form-group"><input type="text" placeholder="Option" class="c_opt form-control" /></div></div><div class="col-md-0"><div class="form-group"><input type="text" placeholder="Value" class="c_val form-control" /></div></div><div class="col-md-3"><div class="form-group"><div class="col-md-12"><input type="checkbox" name="correct_answer" placeholder="correct" class="cb_checkbox" /></div></div></div><div class="col-md-1"> <i class="margin-top-5 margin-left-5 fa fa-times-circle default_red fa-2x remove_more_checkbox" data-field="' + field + '"/></div></div>');
 		var options = '';
 		$('.checkbox_row_' + field).each(function() {
 			var opt = $(this).find('.c_opt').val();
