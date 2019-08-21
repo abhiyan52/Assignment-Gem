@@ -39,9 +39,9 @@
       %h1.test-completed Good Job! You have completed the assignment
       %p.results-info Your assignment has been sucessfully summitted
       %span.tick
-      = link_to jobs_path() do
-        %button.btn.btn-primary
-          View More Jobs
+      -# = link_to classroom_course_path(@section.course) do
+      -#   %button.btn.btn-primary
+      -#     Proceed To Another Section
 
 
 :javascript
@@ -62,7 +62,7 @@
   $(".quiz-end-section").removeClass("hidden");
   
   $.ajax({
-      url:'#{submit_path}',
+      url:'#{submit_url}',
       type:'POST',
       dataType:'json',
       data:{answered_questions},
