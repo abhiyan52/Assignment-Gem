@@ -1,0 +1,106 @@
+%section.course_content
+  .container.quiz-container
+    .quiz-start-section.col-lg-8.col-centered
+      .quiz-intro-section
+        %h4
+          = title
+        .quiz-rules
+          %p
+            All the questions are mandatory
+          %button.btn.btn-primary#start-quiz
+            Start Assignment
+    .col-lg-12
+      - quiz_questions.map{|i| OpenStruct.new JSON.parse(i)}.select{|i| i.valid == true}.each_with_index do |quiz_element,index|
+        - if ActiveRecord::Type::Boolean.new.cast(quiz_element.valid)
+          %div.hero.is-primary.is-fullheight.quiz-questions.col-lg-8.col-centered.hidden{id: "quiz-render-point-#{quiz_element.id}"}
+            .hero-body
+              .columns.is-mobile.is-centered
+                .column.is-half
+                  .has-text-centered
+                    .quiz-bottom-navigation
+                      - if index > 0 
+                        %button.btn.nav-back-button{for: index, question_id: quiz_element.id, question_type: quiz_element.html_input_type}
+                          Back
+                    %h7.subtitle.has-text-centered.is-uppercase.is-7.navigation=  "QUESTION #{index + 1} OF #{quiz_questions.length}"
+                    %h5.subtitle.has-text-centered.is-5= quiz_element.question   
+                    - if quiz_element.html_input_type == "checkbox" || quiz_element.html_input_type == "radio"   
+                      - quiz_element.choices.each_with_index do |choice,index|
+                        %input{type: quiz_element.html_input_type,name: quiz_element.id.to_s,value: choice,id: quiz_element.id.to_s + index.to_s, class: "quiz-radio"}
+                        %label{for: quiz_element.id.to_s + index.to_s }
+                          %p.option.has-text-grey-dark.selected-answer
+                            = choice
+                    - elsif quiz_element.html_input_type == "paragraph"
+                      %textarea{placeholder: "Write Answer Here..", required: "required"}
+                    - else
+                      %input{type: quiz_element.html_input_type, placeholder: "Write Answer Here..", required: "required"}
+                  %button.btn.nav-next-button{for: index, question_id: quiz_element.id, question_type: quiz_element.html_input_type}
+                    = (index == quiz_questions.length - 1) ? "Submit" : "Proceed"
+    .quiz-end-section.col-lg-8.col-centered.hidden 
+      %h1.test-completed Good Job! You have completed the assignment
+      %p.results-info Your assignment has been sucessfully summitted
+      %span.tick
+      = link_to jobs_path() do
+        %button.btn.btn-primary
+          View More Jobs
+
+
+:javascript
+  var  questions = $(".quiz-questions");
+  
+  var is_started = false;
+  var answered_questions = {}
+  function startQuiz(){
+    $(".quiz-start-section").addClass("hidden");
+    $(questions[0]).removeClass("hidden");
+    is_started = true;
+  }
+  $("#start-quiz").click(()=> startQuiz())
+
+  
+  function submitQuizResult(){
+  $(".loader").show();
+  $(".quiz-end-section").removeClass("hidden");
+  
+  $.ajax({
+      url:'#{submit_path}',
+      type:'POST',
+      dataType:'json',
+      data:{answered_questions},
+      error:function(data){
+          console.log('something went wrong.');
+      }
+  });
+  }
+
+  $(".quiz-bottom-navigation .btn,.nav-next-button").click(function(e){
+    
+    if(is_started){
+      if($(this).hasClass("nav-back-button")){
+        (Number($(this).attr('for'))) == 0 ? (null) : ($(questions[Number($(this).attr('for'))]).toggleClass("hidden") && $(questions[Number($(this).attr('for')) - 1]).toggleClass("hidden") )
+      } else{
+      question_id = $(this).attr('question_id');
+      question_type = $(this).attr('question_type');
+      if(question_type == "checkbox" || question_type == "radio"){
+        checked_answers = $("#quiz-render-point-"+question_id).find("input:checked");
+        answers = []
+        for(i=0; i< checked_answers.length ; i++){
+           answers.push($(checked_answers[i]).val());
+        }
+      } else {
+        answers = $("#quiz-render-point-"+question_id).find("input[type=text]").val(); 
+      }
+      if(answers.length == 0 ){
+      alert("This question is mandatory");  
+      } else{
+      answered_questions[question_id] = answers 
+      $(questions[Number($(this).attr('for'))]).addClass("hidden");
+      if(Number($(this).attr('for')) + 1 < questions.length){
+        $(questions[Number($(this).attr('for')) + 1]).removeClass("hidden");
+      }else{
+         submitQuizResult();
+      }
+      }
+      
+    }
+    }
+  });
