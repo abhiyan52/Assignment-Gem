@@ -7,6 +7,7 @@
       .row
         .col-md-9.bal_builder
           .form_builder_area
+            = quiz_question_answers.html_safe
         .col-md-3.builder-navigation
           %nav.nav-sidebar
             %ul.nav
@@ -37,12 +38,27 @@
               %li.submit-json
                 = form_for :quiz, url: submit_url, :method=>method do |f|
                   = f.hidden_field :quiz_question_answers
+                  = f.hidden_field :form_builder_template
                   %button.btn.btn-primary{type: "Submit"}
                     Submit    
 
 :javascript
   var result_json;
   $("form").submit(function(){
+    inputElements = $(".form_builder_area").find("input[type=text]")
+    for(i=0 ; i < inputElements.length; i++){
+      $(inputElements[i]).attr("value",$(inputElements[i]).val())        
+    }
+    inputElements = $(".form_builder_area").find("input[type=checkbox],input[type=radio]");
+    for(i=0 ; i < inputElements.length; i++){
+      $(inputElements[i]).attr('checked', $(inputElements[i]).prop('checked'))        
+    }
     $("#quiz_quiz_question_answers").val(result_json);
+    $("#quiz_form_builder_template").val($(".form_builder_area.ui-sortable").html());
     return true;
   });
+
+
+  
+
+  

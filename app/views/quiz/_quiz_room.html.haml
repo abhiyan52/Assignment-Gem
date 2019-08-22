@@ -65,7 +65,6 @@
   $.ajax({
       url:'#{submit_url}',
       type:'POST',
-      dataType:'json',
       data:{answered_questions},
       error:function(data){
           console.log('something went wrong.');
