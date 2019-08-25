@@ -1,0 +1,70 @@
+= stylesheet_link_tag "km_assignment"
+- result = OpenStruct.new(candidate_submission["result_summary"])
+.container-fluid.pt_110{style:"padding-top: 4em;"}
+  %h2 Evaluate Quiz
+  .col-lg-12
+    - candidate_submission["analysis_per_question"].each_with_index do |(key,value),index|
+      .quiz-question-answers
+        .quiz-question-answers-item.tab-1.col-lg-8
+          %p
+            %span Q.#{index + 1}
+            %span= value["question"]
+            %span (1 marks)
+          .quiz-answer
+            %p.mb-0  Candidate's Answer
+            .col-lg-12.quiz-answer-container.candidate-answer=value["candidate_answer"]
+            %p.mb-0  Correct Answer
+            .col-lg-12.quiz-answer-container.correct-answer=value["correct_answer"].blank? ? "N.A" : value["correct_answer"]   
+        .quiz-question-answers-item.tab-2.col-lg-4
+          %p.text-right
+            %span#remarks{class: value["remarks"]}
+              = value["remarks"]
+          .col-lg-12.evaluate-buttons
+            = link_to "#", "data-type": "correct","data-question-id": key ,"data-correct-answer": value["remarks"] == "incorrect" ? false : true do
+              %i.la.la-check-circle-o
+
+            = link_to "#","data-type": "incorrect","data-question-id": key,"data-correct-answer": value["remarks"] == "incorrect" ? false : true do
+              %i.la.la-close
+
+  .top-bar.sticky-bar.col-lg-12
+    .bottom-items
+      .bottom-item Number of Questions: #{ result.total_questions}
+      .bottom-item.float-right
+        = form_for :quiz, url:  submit_url, html: {id: "submit-evaluation"} ,method: :post do |f|
+          = f.hidden_field :evaluated_answer_sheet
+          %button.btn.custom_btn_secondary.float-none
+            Submit
+      .bottom-item
+        Total Points:
+        %span#total-points #{result.total_correct_answers}  
+        
+           
+:javascript
+  var question_json = JSON.parse(`#{candidate_submission.to_json.html_safe}`);
+  var totalPoints = #{result.total_correct_answers};
+  $(".evaluate-buttons a").click(function(e){
+    e.preventDefault();
+    
+    let buttonType = $(this).attr("data-type");
+    let isCorrect = $(this).attr("data-correct-answer") == "false" ? false : true;
+    let question_id = $(this).attr("data-question-id");
+    if(buttonType == "correct" && !isCorrect){
+      totalPoints = Number(totalPoints) + 1
+      $(this).attr("data-correct-answer","true");
+      $(this).closest(".evaluate-buttons").find("a[data-type=incorrect]").attr("data-correct-answer","true");
+      $(this).closest(".quiz-question-answers-item").find("#remarks").text("correct").addClass("correct").removeClass("incorrect");
+      question_json.analysis_per_question[question_id]["remarks"] = "correct"
+    }else if(buttonType == "incorrect" && isCorrect){
+      totalPoints = Number(totalPoints) - 1
+      $(this).attr("data-correct-answer","false");
+        $(this).closest(".evaluate-buttons").find("a[data-type=correct]").attr("data-correct-answer","false");
+        $(this).closest(".quiz-question-answers-item").find("#remarks").text("incorrect").addClass("incorrect").removeClass("correct");
+        question_json.analysis_per_question[question_id]["remarks"] = "incorrect"
+    }
+    $("#total-points").text(totalPoints);
+  });
+   $("#submit-evaluation").click(function(){
+    question_json.result_summary.total_correct_answers = totalPoints;
+    $("#quiz_evaluated_answer_sheet").val(JSON.stringify(question_json));
+    return true;
+  });

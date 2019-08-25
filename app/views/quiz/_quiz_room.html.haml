@@ -30,7 +30,7 @@
                         %label{for: quiz_element.id.to_s + index.to_s }
                           %p.option.has-text-grey-dark.selected-answer
                             = choice
-                    - elsif quiz_element.html_input_type == "paragraph"
+                    - elsif quiz_element.html_input_type == "textarea"
                       %textarea{placeholder: "Write Answer Here..", required: "required"}
                     - else
                       %input{type: quiz_element.html_input_type, placeholder: "Write Answer Here..", required: "required"}
@@ -73,7 +73,6 @@
   }
 
   $(".quiz-bottom-navigation .btn,.nav-next-button").click(function(e){
-    
     if(is_started){
       if($(this).hasClass("nav-back-button")){
         (Number($(this).attr('for'))) == 0 ? (null) : ($(questions[Number($(this).attr('for'))]).toggleClass("hidden") && $(questions[Number($(this).attr('for')) - 1]).toggleClass("hidden") )
@@ -87,7 +86,7 @@
            answers.push($(checked_answers[i]).val());
         }
       } else {
-        answers = $("#quiz-render-point-"+question_id).find("input[type=text]").val(); 
+        answers = $("#quiz-render-point-"+question_id).find("input[type=text],input[type=number],input[type=date],textarea").val(); 
       }
       if(answers.length == 0 ){
       alert("This question is mandatory");  
@@ -100,7 +99,6 @@
          submitQuizResult();
       }
       }
-      
     }
     }
   });

@@ -56,22 +56,26 @@ module KmAssignment
 
   def self.check_answer(form_field,candidate_answer)
     is_correct = false
-    if ["radio","checkbox"].include?(form_field.html_input_type)
-      if form_field.html_input_type == "checkbox"
-        is_correct = true if (form_field.correct_answer.map { |i| i.downcase } - candidate_answer.map { |i| i.downcase }).empty?
-      elsif form_field.html_input_type == "radio"
-        is_correct = true if candidate_answer[0].downcase == form_field.correct_answer[0].downcase     
-      end  
-    elsif ["text","textarea"].include?(form_field.html_input_type)  
-      is_correct = true if candidate_answer.downcase == form_field.correct_answer.downcase
-    end  
+    begin
+      if ["radio","checkbox"].include?(form_field.html_input_type)
+        if form_field.html_input_type == "checkbox"
+          is_correct = true if (form_field.correct_answer.map { |i| i.downcase } - candidate_answer.map { |i| i.downcase }).empty?
+        elsif form_field.html_input_type == "radio"
+          is_correct = true if candidate_answer[0].downcase == form_field.correct_answer[0].downcase     
+        end  
+      elsif ["text","textarea"].include?(form_field.html_input_type)  
+        is_correct = true if candidate_answer.downcase == form_field.correct_answer.downcase
+      end        
+    rescue StandardError
+      is_correct = false  
+    end
     return is_correct
   end
   
   def self.process_text_field(field)
     quiz_form_field = OpenStruct.new({})
     quiz_form_field.id = SecureRandom.hex(16)
-    quiz_form_field.html_input_type = field.type
+    quiz_form_field.html_input_type = (field.type == "paragraph") ? "textarea" : field.type
     quiz_form_field.question = field.label
     quiz_form_field.correct_answer = field.correct_answer
     quiz_form_field.valid = check_validity(quiz_form_field)
@@ -79,7 +83,7 @@ module KmAssignment
   end
 
   def self.check_validity(field)
-    (!field.question.blank? && !field.correct_answer.blank?) ? true : false
+    field.html_input_type == "textarea" || (!field.question.blank? && (!field.correct_answer.blank?)) ? true : false
   end
   
   def self.proccess_radio_checkbox_field(field)
