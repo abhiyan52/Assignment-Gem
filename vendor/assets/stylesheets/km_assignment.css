@@ -5002,6 +5002,14 @@ input[type="checkbox"]:checked + label .option , input[type=radio]:checked + lab
     margin-top: 1em;
     margin-bottom: 2em;
 }
+ i.voice-question{
+  color: white;
+  background: purple;
+  padding: 0.6em;
+  border-radius: 25px;
+  float: right;
+  cursor: pointer;
+}
 
 .quiz-end-section h1.test-completed {
   font-size: 20px;
