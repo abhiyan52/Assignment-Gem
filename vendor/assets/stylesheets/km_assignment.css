@@ -4981,7 +4981,6 @@ input[type="checkbox"]:checked + label .option , input[type=radio]:checked + lab
 }
 .quiz-bottom-navigation{
     min-height: 3em;
-    margin-bottom: 2em;
 }
 .quiz-bottom-navigation .btn.nav-next-button{
     float:right;
@@ -5070,14 +5069,30 @@ input:focus:required:invalid + span.validation-message{
   padding: 1em 0.6em 1em ;
 }
 
+.nav-next-button:hover{
+  color: white;
+  background: #ff0659;
+}
+
 .quiz-container input{
   border: 1px solid #fb236a;
   background: none;
   width: 100%;
   padding: 1em;
   margin: 1em 0 1em 0;
+  color: black;
 }
 
+.quiz-container textarea{
+  border: 1px solid #fb236a;
+  color: black;
+}
+.subtitle.is-5{
+  color: black;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 1.2em;
+}
 .quiz-container input[type="text"]{
   height: 5em;
 }
@@ -5145,6 +5160,9 @@ input:focus:required:invalid + span.validation-message{
   cursor: pointer;
 }
 
+.btn .nav-next-button{
+  margin-top: 1em;
+}
 
 .sort-result .dropdown {
   position: relative;
