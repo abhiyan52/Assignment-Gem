@@ -95,7 +95,12 @@
   }
 
   $(".quiz-bottom-navigation .btn,.nav-next-button").click(function(e){
-      window.speechSynthesis.cancel()
+     try{
+       window.speechSynthesis.cancel();
+     }catch{
+
+     }
+      
     if(is_started){
       if($(this).hasClass("nav-back-button")){
         (Number($(this).attr('for'))) == 0 ? (null) : ($(questions[Number($(this).attr('for'))]).toggleClass("hidden") && $(questions[Number($(this).attr('for')) - 1]).toggleClass("hidden") )
