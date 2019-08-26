@@ -50,15 +50,15 @@
 
 
 :javascript
-
+  current_speech  = null;
   function speak(text){
     event.preventDefault();
     loadVoices()
-    var msg = new SpeechSynthesisUtterance(text);
-    msg.rate = 0.8;
-    msg.pitch = 1;
-    msg.voice = speechSynthesis.getVoices().filter(function(voice) { return voice.lang == "hi-IN"})[0] 
-    window.speechSynthesis.speak(msg);  
+    current_speech = new SpeechSynthesisUtterance(text);
+    current_speech.rate = 0.8;
+    current_speech.pitch = 1;
+    current_speech.voice = speechSynthesis.getVoices().filter(function(voice) { return voice.lang == "hi-IN"})[0] 
+    window.speechSynthesis.speak(current_speech);  
   }
 
   function loadVoices() {
@@ -95,6 +95,7 @@
   }
 
   $(".quiz-bottom-navigation .btn,.nav-next-button").click(function(e){
+      window.speechSynthesis.cancel()
     if(is_started){
       if($(this).hasClass("nav-back-button")){
         (Number($(this).attr('for'))) == 0 ? (null) : ($(questions[Number($(this).attr('for'))]).toggleClass("hidden") && $(questions[Number($(this).attr('for')) - 1]).toggleClass("hidden") )
