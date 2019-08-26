@@ -11,8 +11,9 @@
           %button.btn.btn-primary#start-quiz
             Start Assignment
     .col-lg-12
-      - quiz_questions.map{|i| OpenStruct.new JSON.parse(i)}.select{|i| i.valid == true}.each_with_index do |quiz_element,index|
-        - if ActiveRecord::Type::Boolean.new.cast(quiz_element.valid)
+      - quiz_questions.map{|i| OpenStruct.new JSON.parse(i)}.each_with_index do |quiz_element,index|
+        -# ActiveRecord::Type::Boolean.new.cast(quiz_element.valid) .select{|i| i.valid == true}
+        - if true
           %div.hero.is-primary.is-fullheight.quiz-questions.col-lg-8.col-centered.hidden{id: "quiz-render-point-#{quiz_element.id}"}
             .hero-body
               .columns.is-mobile.is-centered

@@ -29,16 +29,17 @@
     .bottom-items
       .bottom-item Number of Questions: #{ result.total_questions}
       .bottom-item.float-right
-        = form_for :quiz, url:  submit_url, html: {id: "submit-evaluation"} ,method: :post do |f|
+        = form_for :quiz, url:  submit_url, html: {id: "submit-evaluation-form"} ,method: :post do |f|
           = f.hidden_field :evaluated_answer_sheet
-          %button.btn.custom_btn_secondary.float-none
-            Submit
+        %button#submit-btn.btn.custom_btn_secondary.float-none{type: 'submit'}
+          Submit
       .bottom-item
         Total Points:
         %span#total-points #{result.total_correct_answers}  
         
-           
+    
 :javascript
+
   var question_json = JSON.parse(`#{candidate_submission.to_json.html_safe}`);
   var totalPoints = #{result.total_correct_answers};
   $(".evaluate-buttons a").click(function(e){
@@ -62,8 +63,9 @@
     }
     $("#total-points").text(totalPoints);
   });
-   $("#submit-evaluation").click(function(){
+  $("#submit-btn").on('click',function(){
     question_json.result_summary.total_correct_answers = totalPoints;
     $("#quiz_evaluated_answer_sheet").val(JSON.stringify(question_json));
+    $("#submit-evaluation-form").submit();
     return true;
   });
