@@ -4934,7 +4934,7 @@ input[type="checkbox"]:checked + label .option , input[type=radio]:checked + lab
   width: 90%;
 } 
 
-.quiz-questions, .quiz-end-section, .quiz-start-section{
+.quiz-end-section, .quiz-start-section{
   margin-top: 2em;
   background: none;
   min-height: 25em;
@@ -4944,6 +4944,18 @@ input[type="checkbox"]:checked + label .option , input[type=radio]:checked + lab
   border: 1px solid black;  
   border-style: dotted;
   color:lightcoral;
+}
+
+.quiz-questions {
+    margin-top: 0;
+    background: none;
+    min-height: 25em;
+    color: black;
+    padding: 1em;
+    box-shadow: none;
+    border: none;
+    border-style: none;
+    color: lightcoral;
 }
 
 
@@ -4987,6 +4999,8 @@ input[type="checkbox"]:checked + label .option , input[type=radio]:checked + lab
 }
 .subtitle.has-text-centered.is-5{
     text-align: center;
+    margin-top: 1em;
+    margin-bottom: 2em;
 }
 
 .quiz-end-section h1.test-completed {

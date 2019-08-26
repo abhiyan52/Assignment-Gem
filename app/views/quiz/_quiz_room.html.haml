@@ -91,9 +91,12 @@
       }
       if(answers.length == 0 ){
       alert("This question is mandatory");  
-      } else{
+      } else{ 
+	
+	
       answered_questions[question_id] = answers 
       $(questions[Number($(this).attr('for'))]).addClass("hidden");
+      $("html,body").animate({scrollTop :0}, 500);
       if(Number($(this).attr('for')) + 1 < questions.length){
         $(questions[Number($(this).attr('for')) + 1]).removeClass("hidden");
       }else{
