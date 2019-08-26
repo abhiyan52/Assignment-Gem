@@ -1,7 +1,6 @@
 = stylesheet_link_tag "km_assignment"
 - result = OpenStruct.new(candidate_submission["result_summary"])
 .container-fluid.pt_110{style:"padding-top: 4em;"}
-  %h2 Evaluate Quiz
   .col-lg-12
     - candidate_submission["analysis_per_question"].each_with_index do |(key,value),index|
       .quiz-question-answers
