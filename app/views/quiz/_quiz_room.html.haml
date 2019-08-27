@@ -60,7 +60,7 @@
     current_speech.pitch = 1;
     current_speech.voice = speechSynthesis.getVoices().filter(function(voice) { return voice.lang == "hi-IN"})[0] 
     window.speechSynthesis.speak(current_speech);  
-    } else{
+    } catch{
       console.log("Your browser doesnot support Speech API");
     }
   }
