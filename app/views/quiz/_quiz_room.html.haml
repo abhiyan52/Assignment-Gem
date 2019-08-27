@@ -53,21 +53,30 @@
   current_speech  = null;
   function speak(text){
     event.preventDefault();
-    loadVoices()
+    try{
+          loadVoices()
     current_speech = new SpeechSynthesisUtterance(text);
     current_speech.rate = 0.8;
     current_speech.pitch = 1;
     current_speech.voice = speechSynthesis.getVoices().filter(function(voice) { return voice.lang == "hi-IN"})[0] 
     window.speechSynthesis.speak(current_speech);  
+    } else{
+      console.log("Your browser doesnot support Speech API");
+    }
   }
 
   function loadVoices() {
-  var voices = speechSynthesis.getVoices();
-    
+    try{
+     var voices = speechSynthesis.getVoices();
+    }catch{
+      $(".voice-question").hide();
+      console.log("Your browser doesnot support Speech API");
+    }
   }
   
   // Execute loadVoices.
   loadVoices();
+
   var  questions = $(".quiz-questions");
   
   var is_started = false;
@@ -83,15 +92,7 @@
   function submitQuizResult(){
   $(".loader").show();
   $(".quiz-end-section").removeClass("hidden");
-  
-  $.ajax({
-      url:'#{submit_url}',
-      type:'POST',
-      data:{answered_questions},
-      error:function(data){
-          console.log('something went wrong.');
-      }
-  });
+  sendPostRequest('#{submit_url}',{answered_questions}) 
   }
 
   $(".quiz-bottom-navigation .btn,.nav-next-button").click(function(e){
@@ -133,3 +134,21 @@
     }
     }
   });
+
+  function sendPostRequest(url,body){
+  $.ajaxSetup({
+    headers: {
+    'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
+  $.ajax({
+    url: url,
+    type:'POST',
+    data: body,
+    success:function(data){
+    },
+    error:function(data){
+        console.log('something went wrong.');
+    }
+  });
+  }
