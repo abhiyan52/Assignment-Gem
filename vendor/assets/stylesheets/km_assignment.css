@@ -276,6 +276,7 @@ input.c_val.form-control{
 .quiz-container textarea{
   border: 1px solid #fb236a;
   color: black;
+  min-height: 17em;
 }
 .subtitle.is-5{
   color: black;

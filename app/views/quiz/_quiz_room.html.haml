@@ -1,49 +1,85 @@
-= stylesheet_link_tag "km_assignment.css"
-%section.course_content
+= stylesheet_link_tag 'km_assignment.css'
+.col-12.col-md-12.course-wrapper
   .container.quiz-container
-    .quiz-start-section.col-lg-8.col-centered
+    .quiz-start-section.col-lg-12.card
+      %h4
+        = title
+      .quiz-rules
+        %p
+          All the questions are mandatory
       .quiz-intro-section
-        %h4
-          = title
-        .quiz-rules
-          %p
-            All the questions are mandatory
-          %button.btn.btn-primary#start-quiz
-            Start Assignment
+        %button.btn.btn-primary#start-quiz
+          Start Assignment
     .col-lg-12
       - quiz_questions.map{|i| OpenStruct.new JSON.parse(i)}.each_with_index do |quiz_element,index|
-        -# ActiveRecord::Type::Boolean.new.cast(quiz_element.valid) .select{|i| i.valid == true}
-        - if true
-          %div.hero.is-primary.is-fullheight.quiz-questions.col-lg-8.col-centered.hidden{id: "quiz-render-point-#{quiz_element.id}"}
-            .hero-body
-              .columns.is-mobile.is-centered
-                .column.is-half
-                  .has-text-centered
-                    .quiz-bottom-navigation
-                      - if index > 0 
-                        %button.btn.nav-back-button{for: index, question_id: quiz_element.id, question_type: quiz_element.html_input_type}
-                          Back
-                    %h7.subtitle.has-text-centered.is-uppercase.is-7.navigation=  "QUESTION #{index + 1} OF #{quiz_questions.length}"
-                    %i.la.la-volume-up.voice-question{onclick: "speak(`#{quiz_element.question.gsub("_","")}`)"}
-                    %h5.subtitle.has-text-centered.is-5
-                      = quiz_element.question   
+        %div.quiz-questions.col-lg-12.col-centered.card.hidden{id: "quiz-render-point-#{quiz_element.id}"}
+          .quiz-questions-body
+            .columns.is-mobile.is-centered
+              .column.is-half
+                .has-text-centered
+                  .quiz-bottom-navigation
+                    -# - if index > 0
+                    -#   %button.btn.nav-back-button{for: index, question_id: quiz_element.id, question_type: quiz_element.html_input_type}
+                    -#     Back
+                  %h7.navigation-title=  "QUESTION #{index + 1} OF #{1}"
+                  %button.btn.btn-icon.rounded-circle.btn-info.glow.mr-1.mb-1.pull-right.voice-question
+                    %i.bx.bx-volume-full{onclick: "speak(`#{quiz_element.question.gsub("_","") rescue ""}`)"}
+                  %hr/
+                  %h5.subtitle.has-text-centered.is-5
+                    = quiz_element.question.html_safe rescue "-"
+                  - if true
+                    .options
+                      - if quiz_element.html_input_type == "checkbox" || quiz_element.html_input_type == "radio"
+                        - quiz_element.choices.each_with_index do |choice,index|             
+                          %fieldset
+                            - if quiz_element.html_input_type == "radio"
+                              .radio.radio-info.radio-glow
+                                %input{:name => "radioGlow", :type => "radio",id: quiz_element.id.to_s + index.to_s}/
+                                %label{for: quiz_element.id.to_s + index.to_s}
+                                  %span
+                                    = choice
+                            - else 
+                              .checkbox.checkbox-info.checkbox-glow   
+                                %input{type: "checkbox",name: quiz_element.id.to_s,value: choice,id: quiz_element.id.to_s + index.to_s, class: "quiz-radio radio"}
+                                %label{for: quiz_element.id.to_s + index.to_s }
+                                  %span
+                                    =choice   
                       
-                    - if quiz_element.html_input_type == "checkbox" || quiz_element.html_input_type == "radio"   
-                      - quiz_element.choices.each_with_index do |choice,index|
-                        %input{type: quiz_element.html_input_type,name: quiz_element.id.to_s,value: choice,id: quiz_element.id.to_s + index.to_s, class: "quiz-radio"}
-                        %label{for: quiz_element.id.to_s + index.to_s }
-                          %p.option.has-text-grey-dark.selected-answer
-                            = choice
-                    - elsif quiz_element.html_input_type == "textarea"
-                      %textarea{placeholder: "Write Answer Here..", required: "required"}
-                    - else
-                      %input{type: quiz_element.html_input_type, placeholder: "Write Answer Here..", required: "required"}
-                  %button.btn.nav-next-button{for: index, question_id: quiz_element.id, question_type: quiz_element.html_input_type}
-                    = (index == quiz_questions.length - 1) ? "Submit" : "Proceed"
-    .quiz-end-section.col-lg-8.col-centered.hidden 
-      %h1.test-completed Good Job! You have completed the assignment
+                      - elsif quiz_element.html_input_type == "textarea"
+                        %textarea{placeholder: "Write Answer Here..", required: "required"}
+                      - else
+                        %input{type: quiz_element.html_input_type, placeholder: "Write Answer Here..", required: "required"}
+                -#   - else
+                -#     - if quiz_element.question_type == "km_video"
+                -#       .video-container
+                -#         %video{src: quiz_element.artifact_url,class: "assessment-video", controls: false,autoplay: true, oncontextmenu: "return false;"}
+                -#     - if quiz_element.question_type == "km_audio"
+                -#       .audio-container
+                -#         %audio{src: quiz_element.artifact_url,class: "assessment-video", controls: false, oncontextmenu: "return false;"}
+
+                -#     - if quiz_element.question_type == "km_image"
+                -#       %img{src: quiz_element.artifact_url,class: "assessment-image img img-responsive"}
+                -#     .options
+                -#       - if quiz_element.html_input_type == "checkbox" || quiz_element.html_input_type == "radio"
+                -#         - quiz_element.choices.each_with_index do |choice,index|
+                -#           %input{type: quiz_element.html_input_type,name: quiz_element.id.to_s,value: choice,id: quiz_element.id.to_s + index.to_s, class: "quiz-radio"}
+                -#           %label{for: quiz_element.id.to_s + index.to_s }
+                -#             %p.option.has-text-grey-dark.selected-answer
+                -#               = choice
+
+                -#       - elsif quiz_element.html_input_type == "textarea"
+                -#         %textarea{placeholder: "Write Answer Here..", required: "required"}
+                -#       - else
+                -#         %input{type: quiz_element.html_input_type, placeholder: "Write Answer Here..", required: "required"}
+                %button.btn.nav-next-button{for: index, question_id: quiz_element.id, question_type: quiz_element.html_input_type}
+                  = (index == 0) ? "Submit" : "Proceed"
+
+    .quiz-end-section.col-lg-12.col-centered.card.hidden
+      %h1.text-center Good Job! You have completed the assignment
       %p.results-info Your assignment has been sucessfully summitted
       %span.tick
+      %p.text-center.text-primary You are being redirected..
+
 
 
 
